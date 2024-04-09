@@ -8,23 +8,18 @@ document.addEventListener("DOMContentLoaded", function () {
       left: "prev,next today",
       center: "title",
     },
-    // Add event listeners for drag events
     eventReceive: function (info) {
-      // Handle event when dropped into the calendar
       console.log("Event received:", info.event);
     },
     eventDragStart: function (info) {
-      // Handle event drag start
       console.log("Event drag started:", info.event);
     },
     eventDragStop: function (info) {
-      // Handle event drag stop
       console.log("Event drag stopped:", info.event);
     },
   });
   calendar.render();
 
-  // Prevent default behavior for drag events on FullCalendar
   calendarEl.addEventListener("dragover", function (e) {
     e.preventDefault();
   });
@@ -40,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
   calendarEl.addEventListener("drop", function (e) {
     e.preventDefault();
     // Handle drop event here
+
     console.log("Item dropped:", e.target);
   });
 });
@@ -61,12 +57,12 @@ function getRecipesFromLocalStorage() {
   }
 }
 
-function generateCard(title, category, duration) {
+function generateRecipeCard(title, imageUrl, category, duration) {
   const cardDiv = document.createElement("div");
   cardDiv.classList.add("card", "col");
   cardDiv.style.width = "18rem";
   cardDiv.style.height = "fit-content";
-  cardDiv.draggable = true; // Make the card draggable
+  cardDiv.draggable = true;
 
   cardDiv.addEventListener("dragstart", dragStartHandler);
   cardDiv.addEventListener("dragend", dragEndHandler);
@@ -90,6 +86,11 @@ function generateCard(title, category, duration) {
 
   cardHeaderDiv.appendChild(cardTitle);
   cardHeaderDiv.appendChild(starButton);
+
+  const cardImage = document.createElement("img");
+  cardImage.src = imageUrl;
+  cardImage.classList.add("card-img-top");
+  cardImage.alt = "...";
 
   const cardBodyDiv = document.createElement("div");
   cardBodyDiv.classList.add("card-body");
@@ -121,6 +122,7 @@ function generateCard(title, category, duration) {
   cardBodyDiv.appendChild(viewRecipeButton);
 
   cardDiv.appendChild(cardHeaderDiv);
+  cardDiv.appendChild(cardImage);
   cardDiv.appendChild(cardBodyDiv);
 
   return cardDiv;
@@ -140,6 +142,6 @@ const recipiesDiv = document.getElementById("recipies");
 for (let i = 0; i < recipesFromLocalStorage.length; i++) {
   const recipe = recipesFromLocalStorage[i];
   recipiesDiv.appendChild(
-    generateCard(recipe.nom, recipe.categorie, recipe.temps_preparation)
+    generateRecipeCard(recipe.nom, recipe.categorie, recipe.temps_preparation)
   );
 }
