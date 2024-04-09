@@ -1,45 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-  var calendarEl = document.getElementById("calendar");
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    themeSystem: "bootstrap5",
-    height: 400,
-    initialView: "dayGridWeek",
-    headerToolbar: {
-      left: "prev,next today",
-      center: "title",
-    },
-    eventReceive: function (info) {
-      console.log("Event received:", info.event);
-    },
-    eventDragStart: function (info) {
-      console.log("Event drag started:", info.event);
-    },
-    eventDragStop: function (info) {
-      console.log("Event drag stopped:", info.event);
-    },
-  });
-  calendar.render();
-
-  calendarEl.addEventListener("dragover", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("dragenter", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("dragleave", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("drop", function (e) {
-    e.preventDefault();
-    // Handle drop event here
-
-    console.log("Item dropped:", e.target);
-  });
-});
-
 function getRecipesFromLocalStorage() {
   try {
     const storedRecipes = localStorage.getItem("recipes");
@@ -57,8 +15,75 @@ function getRecipesFromLocalStorage() {
   }
 }
 
-function generateRecipeCard(title, imageUrl, category, duration) {
+const recipes = getRecipesFromLocalStorage();
+document.addEventListener("DOMContentLoaded", function () {
+  var Draggable = FullCalendar.Draggable;
+
+  var containerEl = document.getElementById("recipies");
+  var calendarEl = document.getElementById("calendar");
+
+  new Draggable(containerEl, {
+    itemSelector: "card.col",
+    eventData: function (eventEl) {
+      // Access data from the dragged element
+      const titleElement = eventEl.querySelector(".card-title");
+      console.log(titleElement); // Log the title element to see if it's found
+      const title = titleElement ? titleElement.textContent : "Untitled"; // If title element exists, get its text content, otherwise use a default value
+      // Return the event data
+      return {
+        title: title,
+      };
+    },
+  });
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    themeSystem: "bootstrap5",
+    height: 400,
+    initialView: "dayGridWeek",
+    headerToolbar: {
+      left: "prev,next today",
+      center: "title",
+    },
+    editable: true,
+    droppable: true,
+  });
+  calendar.render();
+
+  calendarEl.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+
+  calendarEl.addEventListener("dragenter", function (e) {
+    e.preventDefault();
+  });
+
+  calendarEl.addEventListener("dragleave", function (e) {
+    e.preventDefault();
+  });
+
+  calendarEl.addEventListener("drop", function (e) {
+    e.preventDefault();
+    const id = Number(e.dataTransfer.getData("text/plain"));
+    const recipe = recipes.find((recipe) => recipe.id == id);
+
+    if (recipe) {
+      console.log(e.target);
+
+      // Create a new event on the calendar with the recipe information
+      calendar.addEvent({
+        title: recipe.title, // Use recipe title as event title
+        start: dropDate, // Use drop date as event start date
+        // You can add more properties like end, description, etc., based on your requirements
+      });
+    } else {
+      console.log("Recipe not found.");
+    }
+  });
+});
+
+function generateRecipeCard(id, title, category, duration) {
   const cardDiv = document.createElement("div");
+  cardDiv.setAttribute("id", `${id}`);
   cardDiv.classList.add("card", "col");
   cardDiv.style.width = "18rem";
   cardDiv.style.height = "fit-content";
@@ -87,10 +112,10 @@ function generateRecipeCard(title, imageUrl, category, duration) {
   cardHeaderDiv.appendChild(cardTitle);
   cardHeaderDiv.appendChild(starButton);
 
-  const cardImage = document.createElement("img");
-  cardImage.src = imageUrl;
-  cardImage.classList.add("card-img-top");
-  cardImage.alt = "...";
+  // const cardImage = document.createElement("img");
+  // cardImage.src = imageUrl;
+  // cardImage.classList.add("card-img-top");
+  // cardImage.alt = "...";
 
   const cardBodyDiv = document.createElement("div");
   cardBodyDiv.classList.add("card-body");
@@ -122,7 +147,7 @@ function generateRecipeCard(title, imageUrl, category, duration) {
   cardBodyDiv.appendChild(viewRecipeButton);
 
   cardDiv.appendChild(cardHeaderDiv);
-  cardDiv.appendChild(cardImage);
+  // cardDiv.appendChild(cardImage);
   cardDiv.appendChild(cardBodyDiv);
 
   return cardDiv;
@@ -142,6 +167,11 @@ const recipiesDiv = document.getElementById("recipies");
 for (let i = 0; i < recipesFromLocalStorage.length; i++) {
   const recipe = recipesFromLocalStorage[i];
   recipiesDiv.appendChild(
-    generateRecipeCard(recipe.nom, recipe.categorie, recipe.temps_preparation)
+    generateRecipeCard(
+      recipe.id,
+      recipe.nom,
+      recipe.categorie,
+      recipe.temps_preparation
+    )
   );
 }
