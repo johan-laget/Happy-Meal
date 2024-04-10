@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- IMPORTS ICONS-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <header class="mb-3">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Happy Meal</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="./index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./favorites.html">Favori</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Liste</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input type="text" class="form-control" placeholder="Rechercher une recette"
+                            list="list-timezone" id="input-datalist">
+                        <datalist id="list-timezone">
+                            <option>Asia/Aden</option>
+                            <option>Asia/Aqtau</option>
+                            <option>Asia/Baghdad</option>
+                            <option>Asia/Barnaul</option>
+                            <option>Asia/Chita</option>
+                            <option>Asia/Dhaka</option>
+                            <option>Asia/Famagusta</option>
+                            <option>Asia/Hong_Kong</option>
+                            <option>Asia/Jayapura</option>
+                            <option>Asia/Kuala_Lumpur</option>
+                            <option>Asia/Jakarta</option>
+                        </datalist>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="p-2">
+        <div class="row row-cols-3 gap-3 justify-content-center" id="recipies">
+            <div class="card col" style="width: 18rem; height: fit-content;">
+                <div class="d-flex justify-content-between p-3 align-items-center">
+                    <h5 class="card-title">Card title</h5>
+                    <button type="button" class="btn btn-dark"><i class="ri-star-line"></i></button>
+                </div>
+                <img src="./assets/img/recette1.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p>Categorie: Test</p>
+                        <p><span class="me-2"><i class="ri-time-line"></i></span>12min</p>
+                    </div>
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">Voir la recette</button>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 me-3" id="exampleModalLabel">Card title</h1>
+                            <button type="button" class="btn btn-dark btn-sm"><i class="ri-star-line"></i></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <!-- Contenu de la card (exemple) -->
+                            <div class="card mb-3">
+                                <img src="./assets/img/recette1.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <p>Categorie: Test</p>
+                                        <p><span class="me-2"><i class="ri-time-line"></i></span>12min</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Liste des ingrédients -->
+                            <h3>Liste des ingrédients</h3>
+                            <ul>
+                                <li>Ingrédient 1 <span class="text-primary pointer">Ajouter</span></li>
+                                <li>Ingrédient 2 <span class="text-primary pointer">Ajouter</span></li>
+                                <li>Ingrédient 3 <span class="text-primary pointer">Ajouter</span></li>
+                                <!-- Ajoutez plus d'ingrédients ici -->
+                            </ul>
+
+                            <!-- Étapes de préparation -->
+                            <h3>Étapes de préparation</h3>
+                            <ol>
+                                <li>Étape 1 de la préparation.</li>
+                                <li>Étape 2 de la préparation.</li>
+                                <li>Étape 3 de la préparation.</li>
+                                <!-- Ajoutez plus d'étapes ici -->
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row justify-content-center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+    <footer>
+
+        <!-- Remove the container if you want to extend the Footer to full width. -->
+
+
+    
+      <!-- Section: Social media -->
+      <section
+               class="d-flex justify-content-between p-4"
+               style="background-color: #6351ce"
+               >
+        <!-- Left -->
+        <div class="me-5 text-white">
+          <span>Restez connecté avec nous sur les réseaux sociaux :</span>
+        </div>
+        <!-- Left -->
+  
+        <!-- Right -->
+        <div>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-google"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+        <!-- Right -->
+      </section>
+      <!-- Section: Social media -->
+  
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                <div class="rounded-circle bg-white border border-dark shadow-1-strong d-flex align-items-center justify-content-center mb-4 mx-auto" style="width: 150px; height: 150px;">
+                  <img src=".//assets/img/Happy_Meal.png" height="150" alt="" loading="lazy" />
+                </div>
+                <p class="text-center">Bienvenue sur notre plateforme culinaire ! Découvrez nos Happy Meals : des recettes simples, illustrées et délicieuses. Rejoignez-nous pour des aventures culinaires inoubliables !</p>
+                <ul class="list-unstyled d-flex flex-row justify-content-center">
+                  <li>
+                    <a class="text-white px-2" href="#!">
+                      <i class="fab fa-facebook-square"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-white px-2" href="#!">
+                      <i class="fab fa-instagram"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="text-white ps-2" href="#!">
+                      <i class="fab fa-youtube"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4 mt-3">
+                <h6 class="text-uppercase fw-bold">Mentions légales</h6>
+                <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 120px; background-color: #7c4dff; height: 2px"
+                />
+                <ul>
+                  <li class=""><a href="#">Contactez-nous</a></li>
+                  <li class=""><a href="#">A propos</a></li>
+                  <li class=""><a href="#">Nos recettes</a></li>
+                  <li class=""><a href="#">FAQ</a></li>
+                  <li class=""><a href="#">conditions général</a></li>
+                </ul>
+              </div>
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4 mt-3">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold">Créer une Nouvelle Recette</h6>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto" style="width: 60px; background-color: #7c4dff; height: 2px" />
+            <p><a href="lien_vers_formulaire_de_creation_de_recette"><i class="fas fa-home mr-3"></i> Cliquez ici pour suggérer une nouvelle recette</a></p>
+            <p>partager votre recette unique en suivant ces simples instructions. Partagez votre amour pour la cuisine avec d'autres passionnés dès maintenant !
+            </p>
+
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+  
+      <!-- Copyright -->
+      <div
+           class="text-center p-3"
+           style="background-color: rgba(0, 0, 0, 0.2)">
+           <p>@copyright La Plateforme 2024</p>
+      </div>
+      <!-- Copyright -->
+    <!-- Footer -->
+  
+
+  <!-- End of .container -->
+    </footer>
+    <!-- JS -->
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>
