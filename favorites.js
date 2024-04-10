@@ -69,11 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (recipe) {
       console.log(e.target);
 
-      // Create a new event on the calendar with the recipe information
       calendar.addEvent({
-        title: recipe.title, // Use recipe title as event title
-        start: dropDate, // Use drop date as event start date
-        // You can add more properties like end, description, etc., based on your requirements
+        title: recipe.title,
+        start: dropDate,
       });
     } else {
       console.log("Recipe not found.");
