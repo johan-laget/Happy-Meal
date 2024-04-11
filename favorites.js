@@ -14,162 +14,106 @@ function getRecipesFromLocalStorage() {
     return [];
   }
 }
+var containerEl = document.getElementById("external-events");
 
 const recipes = getRecipesFromLocalStorage();
+recipes.forEach((recipe) => {
+  if (recipe.favorite) {
+    const div = document.createElement("div");
+    div.className =
+      "fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event mb-3";
+    const childDiv = document.createElement("div");
+    childDiv.className = "fc-event-main";
+    childDiv.innerHTML = `${recipe.nom}`;
+    div.appendChild(childDiv);
+    containerEl.appendChild(div);
+
+    const deleteButton = document.createElement("span");
+    deleteButton.className = "delete-btn";
+    deleteButton.innerHTML = "&#10006;";
+
+    deleteButton.addEventListener("click", function () {
+      const allRecipes = JSON.parse(localStorage.getItem("recipes"));
+      const index = allRecipes.findIndex((r) => r.id === recipe.id);
+      if (index !== -1) {
+        allRecipes.splice(index, 1); // Remove the recipe from the array
+        localStorage.setItem("recipes", JSON.stringify(allRecipes)); // Update local storage
+        div.remove(); // Remove the recipe element from the DOM
+      }
+    });
+
+    div.appendChild(deleteButton);
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
+  var Calendar = FullCalendar.Calendar;
   var Draggable = FullCalendar.Draggable;
 
-  var containerEl = document.getElementById("recipies");
   var calendarEl = document.getElementById("calendar");
 
-  new Draggable(containerEl, {
-    itemSelector: "card.col",
-    eventData: function (eventEl) {
-      // Access data from the dragged element
-      const titleElement = eventEl.querySelector(".card-title");
-      console.log(titleElement); // Log the title element to see if it's found
-      const title = titleElement ? titleElement.textContent : "Untitled"; // If title element exists, get its text content, otherwise use a default value
-      // Return the event data
-      return {
-        title: title,
-      };
-    },
-  });
+  function getStoredEvents() {
+    var storedEvents = localStorage.getItem("events");
+    return storedEvents ? JSON.parse(storedEvents) : [];
+  }
 
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    themeSystem: "bootstrap5",
-    height: 400,
+  function storeEvents(events) {
+    localStorage.setItem("events", JSON.stringify(events));
+  }
+
+  var calendar = new Calendar(calendarEl, {
     initialView: "dayGridWeek",
     headerToolbar: {
       left: "prev,next today",
       center: "title",
+      right: "dayGridMonth,timeGridWeek,timeGridDay",
     },
+    events: getStoredEvents(),
     editable: true,
     droppable: true,
+    drop: function (info) {
+      var event = {
+        title: info.draggedEl.innerText,
+        start: info.date,
+        allDay: !info.allDay,
+      };
+      calendar.addEvent(event);
+      storeEvents(
+        calendar.getEvents().map(function (event) {
+          return {
+            title: event.title,
+            start: event.start.toISOString(),
+            allDay: event.allDay,
+          };
+        })
+      );
+    },
+    eventClick: function (info) {
+      if (confirm("Etes-vous sûre de vouloir supprimer ce repas ?")) {
+        info.event.remove();
+        var storedEvents = getStoredEvents();
+        var updatedEvents = storedEvents.filter(function (storedEvent) {
+          return !(
+            storedEvent.title === info.event.title &&
+            new Date(storedEvent.start).toISOString() ===
+              info.event.start.toISOString() &&
+            storedEvent.allDay === info.event.allDay
+          );
+        });
+        storeEvents(updatedEvents);
+      }
+    },
   });
+
   calendar.render();
 
-  calendarEl.addEventListener("dragover", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("dragenter", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("dragleave", function (e) {
-    e.preventDefault();
-  });
-
-  calendarEl.addEventListener("drop", function (e) {
-    e.preventDefault();
-    const id = Number(e.dataTransfer.getData("text/plain"));
-    const recipe = recipes.find((recipe) => recipe.id == id);
-
-    if (recipe) {
-      console.log(e.target);
-
-      calendar.addEvent({
-        title: recipe.title,
-        start: dropDate,
-      });
-    } else {
-      console.log("Recipe not found.");
-    }
+  var containerEl = document.getElementById("external-events");
+  new Draggable(containerEl, {
+    itemSelector: ".fc-event",
+    eventData: function (eventEl) {
+      return {
+        title: eventEl.innerText,
+      };
+    },
   });
 });
-
-function generateRecipeCard(id, title, category, duration) {
-  const cardDiv = document.createElement("div");
-  cardDiv.setAttribute("id", `${id}`);
-  cardDiv.classList.add("card", "col");
-  cardDiv.style.width = "18rem";
-  cardDiv.style.height = "fit-content";
-  cardDiv.draggable = true;
-
-  cardDiv.addEventListener("dragstart", dragStartHandler);
-  cardDiv.addEventListener("dragend", dragEndHandler);
-
-  const cardHeaderDiv = document.createElement("div");
-  cardHeaderDiv.classList.add(
-    "d-flex",
-    "justify-content-between",
-    "p-3",
-    "align-items-center"
-  );
-
-  const cardTitle = document.createElement("h5");
-  cardTitle.classList.add("card-title");
-  cardTitle.textContent = title;
-
-  const starButton = document.createElement("button");
-  starButton.type = "button";
-  starButton.classList.add("btn", "btn-dark");
-  starButton.innerHTML = '<i class="ri-star-line"></i>';
-
-  cardHeaderDiv.appendChild(cardTitle);
-  cardHeaderDiv.appendChild(starButton);
-
-  // const cardImage = document.createElement("img");
-  // cardImage.src = imageUrl;
-  // cardImage.classList.add("card-img-top");
-  // cardImage.alt = "...";
-
-  const cardBodyDiv = document.createElement("div");
-  cardBodyDiv.classList.add("card-body");
-
-  const categoryDurationDiv = document.createElement("div");
-  categoryDurationDiv.classList.add(
-    "d-flex",
-    "justify-content-between",
-    "align-items-center"
-  );
-
-  const categoryParagraph = document.createElement("p");
-  categoryParagraph.textContent = `Categorie: ${category}`;
-
-  const durationParagraph = document.createElement("p");
-  durationParagraph.innerHTML = `<span class="me-2"><i class="ri-time-line"></i></span>${duration}`;
-
-  categoryDurationDiv.appendChild(categoryParagraph);
-  categoryDurationDiv.appendChild(durationParagraph);
-
-  const viewRecipeButton = document.createElement("button");
-  viewRecipeButton.type = "button";
-  viewRecipeButton.classList.add("btn", "btn-dark");
-  viewRecipeButton.dataset.bsToggle = "modal";
-  viewRecipeButton.dataset.bsTarget = "#exampleModal";
-  viewRecipeButton.textContent = "Voir la recette";
-
-  cardBodyDiv.appendChild(categoryDurationDiv);
-  cardBodyDiv.appendChild(viewRecipeButton);
-
-  cardDiv.appendChild(cardHeaderDiv);
-  // cardDiv.appendChild(cardImage);
-  cardDiv.appendChild(cardBodyDiv);
-
-  return cardDiv;
-}
-
-function dragStartHandler(event) {
-  event.dataTransfer.setData("text/plain", event.target.id);
-  event.currentTarget.classList.add("dragging");
-}
-
-function dragEndHandler(event) {
-  event.currentTarget.classList.remove("dragging");
-}
-
-const recipesFromLocalStorage = getRecipesFromLocalStorage();
-const recipiesDiv = document.getElementById("recipies");
-for (let i = 0; i < recipesFromLocalStorage.length; i++) {
-  const recipe = recipesFromLocalStorage[i];
-  recipiesDiv.appendChild(
-    generateRecipeCard(
-      recipe.id,
-      recipe.nom,
-      recipe.categorie,
-      recipe.temps_preparation
-    )
-  );
-}
