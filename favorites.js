@@ -36,9 +36,9 @@ recipes.forEach((recipe) => {
       const allRecipes = JSON.parse(localStorage.getItem("recipes"));
       const index = allRecipes.findIndex((r) => r.id === recipe.id);
       if (index !== -1) {
-        allRecipes.splice(index, 1); // Remove the recipe from the array
-        localStorage.setItem("recipes", JSON.stringify(allRecipes)); // Update local storage
-        div.remove(); // Remove the recipe element from the DOM
+        allRecipes.splice(index, 1);
+        localStorage.setItem("recipes", JSON.stringify(allRecipes));
+        div.remove();
       }
     });
 
