@@ -27,12 +27,19 @@ function getRecipesFromLocalStorage() {
 
 const recipes = getRecipesFromLocalStorage();
 const listTimezone = document.getElementById("list-timezone");
+const autoCompleteArr = new Set();
 recipes.forEach((recipe) => {
-  const optionElement = document.createElement("option");
-  optionElement.value = recipe.nom;
-  listTimezone.appendChild(optionElement);
+  recipe.ingredients.forEach((ingredient) => {
+    autoCompleteArr.add(ingredient.nom);
+  });
+  autoCompleteArr.add(recipe.nom);
 });
 
+autoCompleteArr.forEach((item) => {
+  const option = document.createElement("option");
+  option.value = item;
+  listTimezone.appendChild(option);
+});
 const selectedRecipes = selectRandomRecipes(recipes, 3);
 const recipesContainer = document.querySelector("#recipies-home");
 selectedRecipes.forEach((recipe) => {
